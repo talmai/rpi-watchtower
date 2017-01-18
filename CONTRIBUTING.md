@@ -1,7 +1,11 @@
 ## Prerequisites
 To contribute code changes to this project you will need the following development kits.
  * Go. [Download and install](https://golang.org/doc/install) the Go programming language
- * [docker](https://docs.docker.com/engine/installation/)
+ * [docker](https://docs.docker.com/engine/installation/).
+ 
+ ### Installing Docker on RPi
+ 
+ curl -sSL https://get.docker.com | sh
 
 ## Checking out the code
 When cloning watchtower to your development environment you should place your forked repo within the [standard go code structure](https://golang.org/doc/code.html#Organization).
