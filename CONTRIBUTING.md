@@ -35,7 +35,6 @@ go build     # compiles and packages an executable binary, watchtower
 go test      # runs tests
 ./watchtower # runs the application (outside of a container)
 ```
-
 ```diff
 - there are no tests currently. just fyi
 ```
