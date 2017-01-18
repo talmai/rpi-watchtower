@@ -2,7 +2,7 @@ machine:
   services:
     - docker
   environment:
-    IMAGE_NAME: centurylink/watchtower
+    IMAGE_NAME: talmai/rpi-watchtower
 
 dependencies:
   override:
