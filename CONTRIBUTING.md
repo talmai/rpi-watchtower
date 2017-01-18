@@ -30,10 +30,10 @@ cd watchtower
 ## Building and testing
 watchtower is a go application and is built with go commands. The following commands assume that you are at the root level of your repo.
 ```bash
-go get ./...                                       # analyzes and retrieves package dependencies
-env GOOS=linux GOARCH=arm GOARM=6 go build         # compiles and packages an executable binary, rpi-watchtower
-go test                                            # runs tests
-./rpi-watchtower                                   # runs the application (outside of a container) - needs to be executed on ARM device
+go get ./...                                # analyzes and retrieves package dependencies
+env GOOS=linux GOARCH=arm GOARM=6 go build  # compiles and packages an executable binary, rpi-watchtower
+go test                                     # runs tests
+./rpi-watchtower                            # runs the application (outside of a container) - needs to be executed on ARM device
 ```
 ```diff
 - there are no tests currently. just fyi
