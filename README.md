@@ -1,6 +1,6 @@
 # Watchtower for RPI
 
-A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from [watchtower](https://github.com/v2tec/watchtower)
+A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from the impressive code at [watchtower](https://github.com/v2tec/watchtower), but modified to properly run on a RPi revision 0010 (Q3 2014	B+). This includes cross-compiling watchtower for ARM, and re-packaging the Dockerfile.
 
 ## Overview
 
@@ -8,20 +8,20 @@ Watchtower is an application that will monitor your running Docker containers an
 
 With watchtower you can update the running version of your containerized app simply by pushing a new image to the Docker Hub or your own image registry. Watchtower will pull down your new image, gracefully shut down your existing container and restart it with the same options that were used when it was deployed initially.
 
-For example, let's say you were running watchtower along with an instance of *centurylink/wetty-cli* image:
+For example, let's say you were running watchtower along with an instance of *awesomeproject/wetty-cli* image:
 
 ```
 $ docker ps
 CONTAINER ID   IMAGE                   STATUS          PORTS                    NAMES
-967848166a45   centurylink/wetty-cli   Up 10 minutes   0.0.0.0:8080->3000/tcp   wetty
-6cc4d2a9d1a5   centurylink/watchtower  Up 15 minutes                            watchtower
+967848166a45   awesomeproject/wetty-cli   Up 10 minutes   0.0.0.0:8080->3000/tcp   wetty
+6cc4d2a9d1a5   talmai/rpi-watchtower  Up 15 minutes                            watchtower
 ```
 
-Every few mintutes watchtower will pull the latest *centurylink/wetty-cli* image and compare it to the one that was used to run the "wetty" container. If it sees that the image has changed it will stop/remove the "wetty" container and then restart it using the new image and the same `docker run` options that were used to start the container initially (in this case, that would include the `-p 8080:3000` port mapping).
+Every few mintutes watchtower will pull the latest *awesomeproject/wetty-cli* image and compare it to the one that was used to run the "wetty" container. If it sees that the image has changed it will stop/remove the "wetty" container and then restart it using the new image and the same `docker run` options that were used to start the container initially (in this case, that would include the `-p 8080:3000` port mapping).
 
 ## Usage
 
-Watchtower is itself packaged as a Docker container so installation is as simple as pulling the `centurylink/watchtower` image.
+The end goal is to have Watchtower be packaged as a Docker container so installation will be as simple as pulling the `talmai/rpi-watchtower` image. 
 
 Since the watchtower code needs to interact with the Docker API in order to monitor the running containers, you need to mount */var/run/docker.sock* into the container with the -v flag when you run it.
 
@@ -31,18 +31,17 @@ Run the `watchtower` container with the following command:
 docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  centurylink/watchtower
+  talmai/rpi-watchtower
 ```
 
-If pulling images from private Docker registries, supply registry authentication credentials with the environment variables `REPO_USER` and `REPO_PASS`
-or by mounting the host's docker config file into the container (at the root of the container filesystem `/`).
+If pulling images from private Docker registries, supply registry authentication credentials with the environment variables `REPO_USER` and `REPO_PASS` or by mounting the host's docker config file into the container (at the root of the container filesystem `/`).
 
 ```
 docker run -d \
   --name watchtower \
   -v /home/<user>/.docker/config.json:/config.json \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  drud/watchtower container_to_watch --debug
+  talmai/rpi-watchtower container_to_watch --debug
 ```
 
 ### Arguments
@@ -53,7 +52,7 @@ By default, watchtower will monitor all containers running within the Docker dae
 docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  centurylink/watchtower nginx redis
+  talmai/rpi-watchtower nginx redis
 ```
 
 In the example above, watchtower will only monitor the containers named "nginx" and "redis" for updates -- all of the other running containers will be ignored.
@@ -65,7 +64,7 @@ When no arguments are specified, watchtower will monitor all running containers.
 Any of the options described below can be passed to the watchtower process by setting them after the image name in the `docker run` string:
 
 ```
-docker run --rm centurylink/watchtower --help
+docker run --rm talmai/rpi-watchtower --help
 ```
 
 * `--host, -h` Docker daemon socket to connect to. Defaults to "unix:///var/run/docker.sock" but can be pointed at a remote Docker host by specifying a TCP endpoint as "tcp://hostname:port". The host value can also be provided by setting the `DOCKER_HOST` environment variable.
@@ -91,13 +90,13 @@ If your container should be shutdown with a different signal you can communicate
 This label can be coded directly into your image by using the `LABEL` instruction in your Dockerfile:
 
 ```
-LABEL com.centurylinklabs.watchtower.stop-signal="SIGHUP"
+LABEL ai.talm.watchtower.stop-signal="SIGHUP"
 ```
 
 Or, it can be specified as part of the `docker run` command line:
 
 ```
-docker run -d --label=com.centurylinklabs.watchtower.stop-signal=SIGHUP someimage
+docker run -d --label=ai.talm.watchtower.stop-signal=SIGHUP someimage
 ```
 
 ## Remote Hosts
@@ -107,7 +106,7 @@ By default, watchtower is set-up to monitor the local Docker daemon (the same da
 ```
 docker run -d \
   --name watchtower \
-  centurylink/watchtower --host "tcp://10.0.1.2:2375"
+  talmai/rpi-watchtower --host "tcp://10.0.1.2:2375"
 ```
 
 or
@@ -116,7 +115,7 @@ or
 docker run -d \
   --name watchtower \
   -e DOCKER_HOST="tcp://10.0.1.2:2375" \
-  centurylink/watchtower
+  talmai/rpi-watchtower
 ```
 
 Note in both of the examples above that it is unnecessary to mount the */var/run/docker.sock* into the watchtower container.
@@ -134,7 +133,7 @@ docker run -d \
   --name watchtower \
   -e DOCKER_HOST=$DOCKER_HOST \
   -v $DOCKER_CERT_PATH:/etc/ssl/docker \
-  centurylink/watchtower --tlsverify
+  talmai/rpi-watchtower --tlsverify
 ```
 
 ## Updating Watchtower
