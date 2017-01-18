@@ -5,15 +5,25 @@ To contribute code changes to this project you will need the following developme
  
  ### Installing Docker on RPi
  
- curl -sSL https://get.docker.com | sh
+ ```bash
+curl -sSL https://get.docker.com | sh
+```
+
+Followed by adding your user (pi) to the docker group, and restarting your RPi
+
+ ```bash
+sudo usermod -aG docker pi
+sudo /sbin/shutdown -r now
+```
 
 ## Checking out the code
 When cloning watchtower to your development environment you should place your forked repo within the [standard go code structure](https://golang.org/doc/code.html#Organization).
 ```bash
+export GOPATH=<your_fork_location>
 cd $GOPATH/src
 mkdir <yourfork>
 cd <yourfork>
-git clone git@github.com:<yourfork>/watchtower.git
+git clone http://github.com/talmai/rpi-watchtower
 cd watchtower
 ```
 
@@ -24,6 +34,10 @@ go get ./... # analyzes and retrieves package dependencies
 go build     # compiles and packages an executable binary, watchtower
 go test      # runs tests
 ./watchtower # runs the application (outside of a container)
+```
+
+```diff
+- there are no tests currently. just fyi
 ```
 
 ### Building the docker image
