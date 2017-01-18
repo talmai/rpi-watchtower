@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	watchtowerLabel = "com.centurylinklabs.watchtower"
-	signalLabel     = "com.centurylinklabs.watchtower.stop-signal"
-	zodiacLabel     = "com.centurylinklabs.zodiac.original-image"
+	watchtowerLabel = "ai.talm.watchtower"
+	signalLabel     = "ai.talm.watchtower.stop-signal"
+	zodiacLabel     = "ai.talm.zodiac.original-image"
 )
 
 // NewContainer returns a new Container instance instantiated with the
@@ -51,7 +51,7 @@ func (c Container) ImageID() string {
 // container. If the original image was specified without a particular tag, the
 // "latest" tag is assumed.
 func (c Container) ImageName() string {
-	// Compatibility w/ Zodiac deployments
+	// Compatibility w/ Zodiac deployments (see https://github.com/CenturyLinkLabs/zodiac)
 	imageName, ok := c.containerInfo.Config.Labels[zodiacLabel]
 	if !ok {
 		imageName = c.containerInfo.Config.Image
@@ -81,7 +81,7 @@ func (c Container) Links() []string {
 
 // IsWatchtower returns a boolean flag indicating whether or not the current
 // container is the watchtower container itself. The watchtower container is
-// identified by the presence of the "com.centurylinklabs.watchtower" label in
+// identified by the presence of the "ai.talm.watchtower" label in
 // the container metadata.
 func (c Container) IsWatchtower() bool {
 	val, ok := c.containerInfo.Config.Labels[watchtowerLabel]

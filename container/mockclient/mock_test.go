@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/CenturyLinkLabs/watchtower/container"
+	"github.com/talmai/rpi-watchtower/container"
 )
 
 func TestMockInterface(t *testing.T) {

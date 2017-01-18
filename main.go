@@ -1,4 +1,4 @@
-package main // import "github.com/CenturyLinkLabs/watchtower"
+package main // import "github.com/talmai/rpi-watchtower"
 
 import (
 	"fmt"
@@ -8,9 +8,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/CenturyLinkLabs/watchtower/actions"
-	"github.com/CenturyLinkLabs/watchtower/container"
 	log "github.com/Sirupsen/logrus"
+	"github.com/talmai/rpi-watchtower/actions"
+	"github.com/talmai/rpi-watchtower/container"
 	"github.com/urfave/cli"
 )
 

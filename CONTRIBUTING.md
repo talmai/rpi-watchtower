@@ -31,7 +31,7 @@ cd watchtower
 watchtower is a go application and is built with go commands. The following commands assume that you are at the root level of your repo.
 ```bash
 go get ./... # analyzes and retrieves package dependencies
-go build     # compiles and packages an executable binary, watchtower
+env GOOS=linux GOARCH=arm GOARM=6 go build     # compiles and packages an executable binary, watchtower
 go test      # runs tests
 ./watchtower # runs the application (outside of a container)
 ```
