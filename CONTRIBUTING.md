@@ -39,6 +39,18 @@ go test                                     # runs tests
 - there are no tests currently. just fyi
 ```
 
+A Makefile has been added which streamlines this for you, as follows.
+```bash
+$ make compileARM
+env GOOS=linux GOARCH=arm GOARM=5 go build -o rpi-watchtower_ARM5 ./main.go
+env GOOS=linux GOARCH=arm GOARM=6 go build -o rpi-watchtower_ARM6 ./main.go
+env GOOS=linux GOARCH=arm GOARM=7 go build -o rpi-watchtower_ARM7 ./main.go
+```
+```diff
++ check https://github.com/golang/go/wiki/GoArm for more details
+```
+
+
 ### Building the docker image
 watchtower is packaged and distributed as a docker image. A [golang-builder](https://github.com/CenturyLinkLabs/golang-builder) is used to package the go code and its
 dependencies as a minimally-sized application. The application binary is then layered into to a minimal docker image (see `Dockerfile`), so that the entire image is <10MB.

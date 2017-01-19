@@ -1,6 +1,6 @@
 # Watchtower for RPI
 
-A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from the impressive code at [watchtower](https://github.com/v2tec/watchtower), but modified to properly run on a RPi revision 0010 (Q3 2014	B+). This includes cross-compiling watchtower for ARM, and re-packaging the Dockerfile.
+A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from the impressive code at [CenturyLinkLabs/watchtower](https://github.com/v2tec/watchtower), but modified to properly run on a RPi revision 0010 (Q3 2014	B+). This includes cross-compiling watchtower for ARM, and re-packaging the Dockerfile.
 
 ## Overview
 
