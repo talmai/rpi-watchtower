@@ -104,7 +104,7 @@ func before(c *cli.Context) error {
 
 func start(c *cli.Context) {
 	names := c.Args()
-	log.Debugf("Executing with command arguments: %v", names)
+	log.Info("Executing with command arguments: ", names)
 
 	if err := actions.CheckPrereqs(client, cleanup); err != nil {
 		log.Fatal(err)

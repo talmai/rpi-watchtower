@@ -2,6 +2,7 @@ package actions
 
 import (
 	"math/rand"
+	"strings"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -21,8 +22,10 @@ func containerFilter(names []string) container.Filter {
 	}
 
 	return func(c container.Container) bool {
+		// log.Infof("-- containerFilter: testing for ", c.ImageName())
 		for _, name := range names {
-			if (name == c.Name()) || (name == c.Name()[1:]) {
+			// log.Infof("-- ++ ", name, c.ImageName())
+			if (name == c.ImageName()) || (name == strings.Split(c.ImageName(), ":")[0]) {
 				return true
 			}
 		}
@@ -35,7 +38,7 @@ func containerFilter(names []string) container.Filter {
 // any of the images, the associated containers are stopped and restarted with
 // the new image.
 func Update(client container.Client, names []string, cleanup bool, noRestart bool) error {
-	log.Info("Checking containers for updated images")
+	log.Debug("Checking containers for updated images")
 
 	containers, err := client.ListContainers(containerFilter(names))
 	if err != nil {
@@ -43,11 +46,13 @@ func Update(client container.Client, names []string, cleanup bool, noRestart boo
 		return err
 	}
 
+	log.Debugf("Number of containers found: %d", len(containers))
+
 	for i, container := range containers {
-		log.Infof("Testing container %s.", containers[i].Name())
+		log.Debugf("Testing container %s.", containers[i].Name())
 		stale, err := client.IsContainerStale(container)
 		if err != nil {
-			log.Infof("Unable to update container %s. Proceeding to next.", containers[i].Name())
+			log.Infof("Unable to update container", containers[i].Name(), ". Proceeding to next.")
 			log.Debug(err)
 			stale = false
 		}

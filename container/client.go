@@ -55,7 +55,7 @@ func (client dockerClient) ListContainers(fn Filter) ([]Container, error) {
 	cs := []Container{}
 	bg := context.Background()
 
-	log.Debug("Retrieving running containers")
+	log.Debug("client.ListContainers() Retrieving running containers")
 
 	runningContainers, err := client.api.ContainerList(
 		bg,
@@ -67,11 +67,13 @@ func (client dockerClient) ListContainers(fn Filter) ([]Container, error) {
 
 	for _, runningContainer := range runningContainers {
 		containerInfo, err := client.api.ContainerInspect(bg, runningContainer.ID)
-		log.Debugf("Running container: %v, %v", containerInfo, err)
+
 		if err != nil {
 			log.Debug(err)
 			return nil, err
 		}
+
+		// log.Debugf("Found a running container -> %s", runningContainer.Image)
 
 		imageInfo, _, err := client.api.ImageInspectWithRaw(bg, containerInfo.Image)
 		if err != nil {
@@ -80,11 +82,12 @@ func (client dockerClient) ListContainers(fn Filter) ([]Container, error) {
 		}
 
 		c := Container{containerInfo: &containerInfo, imageInfo: &imageInfo}
-		log.Debugf("Considering container: %v %v", containerInfo, imageInfo)
+
 		if fn(c) {
 			cs = append(cs, c)
-			log.Debugf("Output size: %i", len(cs))
 		}
+
+		// log.Debugf("Output size: %d", len(cs))
 	}
 
 	return cs, nil
@@ -97,7 +100,7 @@ func (client dockerClient) StopContainer(c Container, timeout time.Duration) err
 		signal = defaultStopSignal
 	}
 
-	log.Infof("Stopping %s (%s) with %s", c.Name(), c.ID(), signal)
+	log.Debugf("Stopping %s (%s) with %s", c.Name(), c.ID(), signal)
 
 	if err := client.api.ContainerKill(bg, c.ID(), signal); err != nil {
 		return err
@@ -150,7 +153,7 @@ func (client dockerClient) IsContainerStale(c Container) (bool, error) {
 	imageName := c.ImageName()
 
 	if client.pullImages {
-		log.Debugf("Pulling %s for %s", imageName, c.Name())
+		log.Info("Pulling ", imageName, " for ", c.Name())
 
 		var opts types.ImagePullOptions // ImagePullOptions can take a RegistryAuth arg to authenticate against a private registry
 		auth, err := EncodedAuth(imageName)
