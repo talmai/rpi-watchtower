@@ -39,10 +39,12 @@ func Update(client container.Client, names []string, cleanup bool, noRestart boo
 
 	containers, err := client.ListContainers(containerFilter(names))
 	if err != nil {
+		log.Debug(err)
 		return err
 	}
 
 	for i, container := range containers {
+		log.Infof("Testing container %s.", containers[i].Name())
 		stale, err := client.IsContainerStale(container)
 		if err != nil {
 			log.Infof("Unable to update container %s. Proceeding to next.", containers[i].Name())

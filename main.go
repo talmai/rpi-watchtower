@@ -104,6 +104,7 @@ func before(c *cli.Context) error {
 
 func start(c *cli.Context) {
 	names := c.Args()
+	log.Debug(names)
 
 	if err := actions.CheckPrereqs(client, cleanup); err != nil {
 		log.Fatal(err)
