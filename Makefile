@@ -33,7 +33,7 @@ rmi:
 	# env REPO_USER=xxx REPO_PASS=xxxx docker run -d --name watchtower -v /var/run/docker.sock:/var/run/docker.sock lightingiot/rpi-test --api-version=1.24  --debug
 	#docker run -it lightingiot/rpi-test
 	#docker run -v /var/run/docker.sock:/var/run/docker.sock talmai/rpi-watchtower lightingiot/rpi-test
-	#env REPO_USER=xxx REPO_PASS=xxx docker run -d --name watchtower -v /var/run/docker.sock:/var/run/docker.sock talmai/rpi-watchtower lightingiot/rpi-test
+	#env REPO_USER=xxx REPO_PASS=xxx docker run -d --name watchtower -v /var/run/docker.sock:/var/run/docker.sock talmai/rpi-watchtower --api-version=1.24 --debug lightingiot/rpi-test
 	#docker ps -a | grep Exited | cut -d ' ' -f 1 | xargs docker rm
 	#docker rmi $(docker images --quiet --filter "dangling=true")
 

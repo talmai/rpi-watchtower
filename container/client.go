@@ -61,24 +61,29 @@ func (client dockerClient) ListContainers(fn Filter) ([]Container, error) {
 		bg,
 		types.ContainerListOptions{})
 	if err != nil {
+		log.Debug(err)
 		return nil, err
 	}
 
 	for _, runningContainer := range runningContainers {
 		containerInfo, err := client.api.ContainerInspect(bg, runningContainer.ID)
+		log.Debugf("Running container: %v, %v", containerInfo, err)
 		if err != nil {
+			log.Debug(err)
 			return nil, err
 		}
-		// log.Debug(containerInfo)
 
 		imageInfo, _, err := client.api.ImageInspectWithRaw(bg, containerInfo.Image)
 		if err != nil {
+			log.Debug(err)
 			return nil, err
 		}
 
 		c := Container{containerInfo: &containerInfo, imageInfo: &imageInfo}
+		log.Debugf("Considering container: %v %v", containerInfo, imageInfo)
 		if fn(c) {
 			cs = append(cs, c)
+			log.Debugf("Output size: %i", len(cs))
 		}
 	}
 
