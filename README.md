@@ -8,8 +8,8 @@ Watchtower is an application that will monitor your running Docker containers an
 
 ```diff
 - The comparison is made between the running container Image name (IMAGE) 
-not the container Name (NAMES). We also ignore the version 
-(so nginx:latest is compared with ngingx for now)
+- not the container Name (NAMES). We also ignore the version 
+- (so nginx:latest is compared with ngingx for now)
 ```
 
 With watchtower you can update the running version of your containerized app simply by pushing a new image to the Docker Hub or your own image registry. Watchtower will pull down your new image, gracefully shut down your existing container and restart it with the same options that were used when it was deployed initially.
