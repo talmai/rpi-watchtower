@@ -6,6 +6,10 @@ A process for watching your Docker containers and automatically restarting them 
 
 Watchtower is an application that will monitor your running Docker containers and watch for changes to the images that those containers were originally started from. If watchtower detects that an image has changed, it will automatically restart the container using the new image.
 
+```diff
+- The comparison is made between the running container Image name (IMAGE) not the container Name (NAMES). We also ignore the version (so nginx:latest is compared with ngingx for now)
+```
+
 With watchtower you can update the running version of your containerized app simply by pushing a new image to the Docker Hub or your own image registry. Watchtower will pull down your new image, gracefully shut down your existing container and restart it with the same options that were used when it was deployed initially.
 
 For example, let's say you were running watchtower along with an instance of *awesomeproject/wetty-cli* image:
@@ -41,7 +45,7 @@ docker run -d \
   --name watchtower \
   -v /home/<user>/.docker/config.json:/config.json \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  talmai/rpi-watchtower container_to_watch --debug
+  talmai/rpi-watchtower --apiversion=1.24 --debug container_to_watch
 ```
 
 ### Arguments
@@ -96,7 +100,10 @@ LABEL ai.talm.watchtower.stop-signal="SIGHUP"
 Or, it can be specified as part of the `docker run` command line:
 
 ```
-docker run -d --label=ai.talm.watchtower.stop-signal=SIGHUP someimage
+docker run -d \
+  --label=ai.talm.watchtower.stop-signal=SIGHUP \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  talmai/rpi-watchtower resin/rpi-raspbian:jessie
 ```
 
 ## Remote Hosts
