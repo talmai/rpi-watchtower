@@ -31,14 +31,17 @@ The end goal is to have Watchtower be packaged as a Docker container so installa
 
 Since the watchtower code needs to interact with the Docker API in order to monitor the running containers, you need to mount */var/run/docker.sock* into the container with the -v flag when you run it.
 
-Run the `watchtower` container with the following command:
+Run the `watchtower` container followed by your RPi `<ARM_VERSION>`, where `<ARM_VERSION` refers to the compiled binary ARM version. The pre-built versions include `GOARM=5`, `GOARM=6` and `GOARM=7`, which generate respective executables.
+
+So the following command would execute the binary on a ARM6 device:
 
 ```
 docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  talmai/rpi-watchtower
+  talmai/rpi-watchtower 6
 ```
+
 
 If pulling images from private Docker registries, supply registry authentication credentials with the environment variables `REPO_USER` and `REPO_PASS` or by mounting the host's docker config file into the container (at the root of the container filesystem `/`).
 
@@ -47,7 +50,8 @@ docker run -d \
   --name watchtower \
   -v /home/<user>/.docker/config.json:/config.json \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  talmai/rpi-watchtower --apiversion=1.24 --debug container_to_watch
+  -e REPO_USER=xxx -e REPO_PASS=xxx  
+  talmai/rpi-watchtower 6 --apiversion=1.24 --debug container_to_watch
 ```
 
 ### Arguments
@@ -58,7 +62,7 @@ By default, watchtower will monitor all containers running within the Docker dae
 docker run -d \
   --name watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  talmai/rpi-watchtower nginx redis
+  talmai/rpi-watchtower 6 nginx redis
 ```
 
 In the example above, watchtower will only monitor the containers named "nginx" and "redis" for updates -- all of the other running containers will be ignored.
@@ -70,7 +74,7 @@ When no arguments are specified, watchtower will monitor all running containers.
 Any of the options described below can be passed to the watchtower process by setting them after the image name in the `docker run` string:
 
 ```
-docker run --rm talmai/rpi-watchtower --help
+docker run --rm talmai/rpi-watchtower 6 --help
 ```
 
 * `--host, -h` Docker daemon socket to connect to. Defaults to "unix:///var/run/docker.sock" but can be pointed at a remote Docker host by specifying a TCP endpoint as "tcp://hostname:port". The host value can also be provided by setting the `DOCKER_HOST` environment variable.
@@ -105,7 +109,7 @@ Or, it can be specified as part of the `docker run` command line:
 docker run -d \
   --label=ai.talm.watchtower.stop-signal=SIGHUP \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  talmai/rpi-watchtower resin/rpi-raspbian:jessie
+  talmai/rpi-watchtower 6 resin/rpi-raspbian:jessie
 ```
 
 ## Remote Hosts
@@ -115,7 +119,7 @@ By default, watchtower is set-up to monitor the local Docker daemon (the same da
 ```
 docker run -d \
   --name watchtower \
-  talmai/rpi-watchtower --host "tcp://10.0.1.2:2375"
+  talmai/rpi-watchtower 6 --host "tcp://10.0.1.2:2375"
 ```
 
 or
@@ -124,7 +128,7 @@ or
 docker run -d \
   --name watchtower \
   -e DOCKER_HOST="tcp://10.0.1.2:2375" \
-  talmai/rpi-watchtower
+  talmai/rpi-watchtower 6
 ```
 
 Note in both of the examples above that it is unnecessary to mount the */var/run/docker.sock* into the watchtower container.
@@ -142,7 +146,7 @@ docker run -d \
   --name watchtower \
   -e DOCKER_HOST=$DOCKER_HOST \
   -v $DOCKER_CERT_PATH:/etc/ssl/docker \
-  talmai/rpi-watchtower --tlsverify
+  talmai/rpi-watchtower 6 --tlsverify
 ```
 
 ## Updating Watchtower
