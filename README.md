@@ -2,6 +2,10 @@
 
 A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from the impressive code at [CenturyLinkLabs/watchtower](https://github.com/v2tec/watchtower), but modified to properly run on a different versions of RaspberryPis. This includes cross-compiling watchtower for ARM, and re-packaging the Dockerfile.
 
+### Available on Docker Hub
+
+`docker pull talmai/rpi-watchtower`
+
 ## Overview
 
 Watchtower is an application that will monitor your running Docker containers and watch for changes to the images that those containers were originally started from. If watchtower detects that an image has changed, it will automatically restart the container using the new image.
