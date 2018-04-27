@@ -1,5 +1,8 @@
 # Watchtower for RPI
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/talmai/rpi-watchtower.svg)](https://hub.docker.com/r/talmai/rpi-watchtower/)
+[![Docker Stars](https://img.shields.io/docker/stars/talmai/rpi-watchtower.svg)](https://hub.docker.com/r/talmai/rpi-watchtower/)
+
 A process for watching your Docker containers and automatically restarting them whenever their base image is refreshed. Originally forked from the impressive code at [CenturyLinkLabs/watchtower](https://github.com/v2tec/watchtower), but modified to properly run on a different versions of RaspberryPis. This includes cross-compiling watchtower for ARM, and re-packaging the Dockerfile.
 
 ### Available on Docker Hub
