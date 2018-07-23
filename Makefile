@@ -33,8 +33,8 @@ test:
 	# run rpi-watchtower
 	#docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e REPO_USER=xxx -e REPO_PASS=xxx talmai/rpi-watchtower 6 --apiversion=1.24 --debug lightingiot/rpi-test
 	docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e REPO_USER=xxx -e REPO_PASS=xxx talmai/rpi-watchtower 6 --apiversion=1.24 --debug lightingiot/rpi-test
-	#docker ps -a | grep Exited | cut -d ' ' -f 1 | xargs docker rm
-	#docker rmi $(docker images --quiet --filter "dangling=true")
+	#-docker ps -a -q | xargs docker rm
+	#-docker images -a | grep "^<none>" | awk '{print $$3}' | xargs docker rmi
 
 #debugProcess:
 #	rm rpi-watchtower_ARM6
